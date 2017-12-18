@@ -4,11 +4,19 @@
 apt-get update
 apt-get upgrade -y
 
+# Basic packages
+apt-get install -y sudo software-properties-common nano curl \
+build-essential dos2unix gcc git git-flow libmcrypt4 libpcre3-dev apt-utils \
+make python2.7-dev python-pip re2c supervisor unattended-upgrades whois zip unzip
+
 # Force Locale
 apt-get install -y locales
 echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
 locale-gen en_US.UTF-8
 export LANG=en_US.UTF-8
+
+# Enable Services
+echo exit 0 > /usr/sbin/policy-rc.d
 
 # Timezone
 ln -sf /usr/share/zoneinfo/UTC /etc/localtime
@@ -17,16 +25,11 @@ ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 apt-add-repository ppa:ondrej/php -y
 
 # PostgreSQL Repo
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add -
 
 # Update Package Lists
 apt-get update
-
-# Basic packages
-apt-get install -y sudo software-properties-common nano curl \
-build-essential dos2unix gcc git git-flow libmcrypt4 libpcre3-dev apt-utils \
-make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim zip unzip
 
 # PostgreSQL + PostGIS
 apt-get install -y postgresql-10-postgis-2.4
@@ -70,24 +73,17 @@ sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
 sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/fpm/php.ini
 sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
 
-# Create homestead user
-adduser homestead
-usermod -p $(echo secret | openssl passwd -1 -stdin) homestead
-# Add homestead to the sudo group and www-data
-usermod -aG sudo homestead
-usermod -aG www-data homestead
-
 # Set The Nginx & PHP-FPM User
 sed -i '1 idaemon off;' /etc/nginx/nginx.conf
-sed -i "s/user www-data;/user homestead;/" /etc/nginx/nginx.conf
+#sed -i "s/user www-data;/user homestead;/" /etc/nginx/nginx.conf
 sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
 
 mkdir -p /run/php
 touch /run/php/php7.1-fpm.sock
-sed -i "s/user = www-data/user = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/;listen\.owner.*/listen.owner = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/;listen\.group.*/listen.group = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
+#sed -i "s/user = www-data/user = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
+#sed -i "s/group = www-data/group = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
+#sed -i "s/;listen\.owner.*/listen.owner = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
+#sed -i "s/;listen\.group.*/listen.group = homestead/" /etc/php/7.1/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
 
 # Install Node
