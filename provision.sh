@@ -5,7 +5,7 @@ apt-get update
 apt-get upgrade -y
 
 # Basic packages
-apt-get install -y sudo software-properties-common nano curl \
+apt-get install -y sudo software-properties-common nano curl wget \
 build-essential dos2unix gcc git git-flow libmcrypt4 libpcre3-dev apt-utils \
 make python2.7-dev python-pip re2c supervisor unattended-upgrades whois zip unzip
 
@@ -16,6 +16,7 @@ locale-gen en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Enable Services
+export RUNLEVEL=1
 echo exit 0 > /usr/sbin/policy-rc.d
 
 # Timezone
@@ -45,20 +46,12 @@ php-pear php-apcu php-memcached php-redis
 # Nginx & PHP-FPM
 apt-get install -y nginx php-fpm
 
-# PhpRedis Extension
-yes '' | pecl install -f redis
-echo -e '; configuration for php zip module\n; priority=20\nextension=redis.so' | tee /etc/php/7.1/mods-available/redis.ini > /dev/null
-phpenmod redis
-
-# Enable mcrypt
-phpenmod mcrypt
-
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
 # Add Composer Global Bin To Path
-printf "\nPATH=\"/home/homestead/.composer/vendor/bin:\$PATH\"\n" | tee -a /home/homestead/.profile
+export PATH="/home/homestead/.composer/vendor/bin:$PATH"
 
 # Set Some PHP CLI Settings
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/cli/php.ini
