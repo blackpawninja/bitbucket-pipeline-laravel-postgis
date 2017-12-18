@@ -15,10 +15,6 @@ echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
 locale-gen en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Enable Services
-export RUNLEVEL=1
-echo exit 0 > /usr/sbin/policy-rc.d
-
 # Timezone
 ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
@@ -101,7 +97,7 @@ apt-get install -y redis-server
 sed -i "s/daemonize yes/daemonize no/" /etc/redis/redis.conf
 
 # Configure default nginx site
-DOCROOT=$BITBUCKET_CLONE_DIR
+DOCROOT=${BITBUCKET_CLONE_DIR-"/var/www/html"}
 
 block="server {
     listen 80 default_server;
