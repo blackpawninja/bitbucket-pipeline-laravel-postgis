@@ -30,6 +30,7 @@ apt-get update
 
 # PostgreSQL + PostGIS
 apt-get install -y postgresql-10-postgis-2.4
+service postgresql start
 
 # PHP 7.1
 apt-get install -y php7.1-cli php7.1-dev \
@@ -45,9 +46,6 @@ apt-get install -y nginx php-fpm
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-
-# Add Composer Global Bin To Path
-export PATH="/home/homestead/.composer/vendor/bin:$PATH"
 
 # Set Some PHP CLI Settings
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/cli/php.ini
@@ -95,9 +93,10 @@ sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 # Redis
 apt-get install -y redis-server
 sed -i "s/daemonize yes/daemonize no/" /etc/redis/redis.conf
+service redis start
 
 # Configure default nginx site
-DOCROOT=${BITBUCKET_CLONE_DIR-"/var/www/html"}
+DOCROOT=${BITBUCKET_CLONE_DIR:-"/var/www/html"}
 
 block="server {
     listen 80 default_server;
@@ -142,3 +141,6 @@ rm /etc/nginx/sites-available/default
 
 cat > /etc/nginx/sites-enabled/default
 echo "$block" > "/etc/nginx/sites-enabled/default"
+
+service php7.1-fpm start
+service nginx start
