@@ -7,3 +7,7 @@ ENV COMPOSER_NO_INTERACTION 1
 ADD provision.sh /provision.sh
 RUN chmod +x provision.sh
 RUN ./provision.sh
+
+ADD supervisord.conf /etc/supervisor/supervisord.conf
+
+ENTRYPOINT [ "/usr/bin/supervisord" ]

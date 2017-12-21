@@ -93,7 +93,6 @@ sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
 # Redis
 apt-get install -y redis-server
 sed -i "s/daemonize yes/daemonize no/" /etc/redis/redis.conf
-service redis start
 
 # Configure default nginx site
 DOCROOT=${BITBUCKET_CLONE_DIR:-"/var/www/html"}
@@ -142,5 +141,3 @@ rm /etc/nginx/sites-available/default
 cat > /etc/nginx/sites-enabled/default
 echo "$block" > "/etc/nginx/sites-enabled/default"
 
-service php7.1-fpm start
-service nginx start
