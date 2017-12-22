@@ -8,5 +8,3 @@ ADD provision.sh /provision.sh
 RUN chmod +x provision.sh
 RUN ./provision.sh
 
-ADD supervisord.conf /etc/supervisor/supervisord.conf
-

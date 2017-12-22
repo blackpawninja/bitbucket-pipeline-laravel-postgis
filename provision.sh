@@ -30,7 +30,6 @@ apt-get update
 
 # PostgreSQL + PostGIS
 apt-get install -y postgresql-10-postgis-2.4
-service postgresql start
 
 # PHP 7.1
 apt-get install -y php7.1-cli php7.1-dev \
@@ -53,7 +52,7 @@ sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/cli/php.ini
 sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/cli/php.ini
 sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
 
-sed -i "s/.*daemonize.*/daemonize = no/" /etc/php/7.1/fpm/php-fpm.conf
+#sed -i "s/.*daemonize.*/daemonize = no/" /etc/php/7.1/fpm/php-fpm.conf
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/fpm/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/fpm/php.ini
 sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
@@ -61,7 +60,7 @@ sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/fpm/php.ini
 sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
 
 # Set The Nginx & PHP-FPM User
-sed -i '1 idaemon off;' /etc/nginx/nginx.conf
+#sed -i '1 idaemon off;' /etc/nginx/nginx.conf
 #sed -i "s/user www-data;/user homestead;/" /etc/nginx/nginx.conf
 sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
 
@@ -76,9 +75,6 @@ sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
 # Install Node
 curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
 apt-get install -y nodejs
-npm install -g grunt-cli
-npm install -g gulp
-npm install -g bower
 
 # Install SQLite
 apt-get install -y sqlite3 libsqlite3-dev
