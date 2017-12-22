@@ -10,4 +10,3 @@ RUN ./provision.sh
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
