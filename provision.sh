@@ -191,7 +191,7 @@ block="server {
 
     location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
         fastcgi_index index.php;
         include fastcgi.conf;
     }
